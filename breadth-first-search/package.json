@@ -1,0 +1,15 @@
+{
+  "name": "breadth-first-search",
+  "version": "1.0.0",
+  "description": "Breadth-first search",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "search",
+    "graph"
+  ],
+  "author": "Samuel Phelps",
+  "license": "MIT"
+}

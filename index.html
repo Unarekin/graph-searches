@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+     
+
+      var map;
+      var infoWindow;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: new google.maps.LatLng(30.267153, -97.7430608),
+          mapTypeId: 'terrain'
+        });
+
+        // Previously geocoded location data
+        var bounds = {"south":30.0986589,"west":-97.93838289999997,"north":30.5168629,"east":-97.56841989999998};
+        map.fitBounds(bounds);
+
+        infoWindow = new google.maps.InfoWindow({content: ''});
+
+        /*
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': 'Austin, TX'}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            console.log(JSON.stringify(results[0].geometry.viewport));
+            map.fitBounds(results[0].geometry.viewport);
+          }
+        });
+        /**/
+
+        for (let i=0;i<stops.length;i++) {
+          createMarker(stops[i]);
+        }
+
+      }
+
+      function createMarker(stop) {
+          var latLng = new google.maps.LatLng(stop.lat, stop.lon);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: stop.name,
+            icon: {
+              url: "http://www.clker.com/cliparts/1/d/9/f/12718435381496695090bus_stop3-hi.png",
+              scaledSize: new google.maps.Size(32,32)
+            }
+          });
+
+          marker.addListener('click', function() {
+            //infoWindow.content ="<strong>" + stop.name + "</strong><br />" + stop.desc;
+            console.log(infoWindow);
+            console.log(infoWindow.content);
+            infoWindow.open(map, marker);
+          });
+      }
+
+
+
+      // Loop through the results array and place a marker for each
+      // set of coordinates.
+      window.eqfeed_callback = function(results) {
+        for (var i = 0; i < results.features.length; i++) {
+          var coords = results.features[i].geometry.coordinates;
+          var latLng = new google.maps.LatLng(coords[1],coords[0]);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map
+          });
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpvxOHdeTunCItIvKRzhLHjF61ZFGFIII&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -7,6 +7,7 @@ var path 		= require('path');
 var graphLib 	= require("graph-data-structure");
 var q 			= require('q');
 var breadth     = require('./breadth-first-search');
+var depth       = require('./depth-first-search');
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -26,3 +27,7 @@ console.log("Finding " + end.id + " from " + start.id + ":");
 var startTime = new Date();
 var steps = breadth(graph, start.id, end.id);
 console.log("   Breadth-first: " + (steps === -1 ? " Could not locate" : steps.toLocaleString()) + " steps, in " + (new Date() - startTime) + "ms.");
+
+startTime = new Date();
+steps = depth(graph, start.id, end.id);
+console.log("   Depth-first: " + (steps === -1 ? " Could not locate" : steps.toLocaleString()) + " steps, in " + (new Date() - startTime) + "ms.");

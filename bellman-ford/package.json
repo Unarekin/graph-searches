@@ -1,0 +1,16 @@
+{
+  "name": "bellman-ford",
+  "version": "1.0.0",
+  "description": "Bellman-ford graph search algorithm",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "graph",
+    "search",
+    "bellman"
+  ],
+  "author": "Samuel Phelps",
+  "license": "MIT"
+}

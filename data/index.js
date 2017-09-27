@@ -9,10 +9,16 @@ module.exports = graphData;
 
 
 function graphData() {
-	var data = JSON.parse(fs.readFileSync(path.resolve(path.join(__dirname, "graph.json")), 'utf-8'));
-	
+	//var data = JSON.parse(fs.readFileSync(path.resolve(path.join(__dirname, "graph.json")), 'utf-8'));
+
 	var graph = new graphLib();
-	graph.deserialize(data);
+
+	var stops = JSON.parse(fs.readFileSync(path.resolve(path.join(__dirname, "stops.json")), 'utf-8'));
+	var routes = JSON.parse(fs.readFileSync(path.resolve(path.join(__dirname, "routes.json")), 'utf-8'));
+
+	stops.forEach(function(stop) { graph.addNode(stop.id); });
+	routes.forEach(function(edge) { graph.addEdge(edge.source, edge.target, edge.weight); });
+	
 	return graph;
 }
 

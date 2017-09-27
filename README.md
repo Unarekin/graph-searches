@@ -1,7 +1,7 @@
 # Graph-Searches
 Implementation of several common graph searching algorithms.  Graph structure is implemented via [graph-data-structure](https://www.npmjs.com/package/graph-data-structure).
 
-You can find a Google Maps-enabled visualization of these on [plunkr](http://run.plnkr.co/PnS9tigHMmrRxak8/);
+You can find a Google Maps-enabled visualization of these on [plunkr](http://run.plnkr.co/J5dMeNgjYKgdhWej/);
 
 ## Data
 The graph is built from a list of stops and stop times taken from the Capital Metro GTFS (General Transit Feed Specification) data set, available here:
@@ -15,9 +15,16 @@ The graph should fairly faithfully represent all of the bus stops in the Austin,
 
 ## Breadth-First
 Simple implementation of a breadth-first search.
+https://en.wikipedia.org/wiki/Breadth-first_search
 
 ## Depth-First
+Simple implementation of a depth-first search.
+https://en.wikipedia.org/wiki/Depth-first_search
+
 ## Bellman-Ford
+Bellman-Ford shortest path finding algorithm.
+https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
+
 ## Dijkstra
 ## A*
 

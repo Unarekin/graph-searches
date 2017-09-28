@@ -1,4 +1,6 @@
 'use strict'
+var fs = require('fs');
+var heap = require('heap');
 
 /**
  * Searches for the shortest path from start to end.
@@ -9,14 +11,15 @@
  */
 
 module.exports = function(graph, start, end) {
-	var distances = {};
-	var parents = {};
 
 	var results = {
 		nodesChecked: 0,
 		path: [],
 		found: false
-	};
+	}
+
+	var distances = {};
+	var parents = {};
 
 	// The graph structure we're using does not provide a mechanism to retrieve all edges
 	var serialized = graph.serialize();
@@ -37,28 +40,59 @@ module.exports = function(graph, start, end) {
 	// It is 0 unitless distance units from our origin to our origin.
 	distances[start] = 0;
 
-	// If only it were this easy in real life to relax.
-	for (let i=0; i<nodes.length-1;i++) {
-		results.nodesChecked++;
+	var openList =new heap(function(a, b) {
+		return distances[a] - distances[b];
+	});
+	openList.push(start);
 
-		for (let j=0;j<edges.length;j++) {
-			let edge = edges[j];
-			// Relax, man.  Relax.
-			if (distances[edge.source] + edge.weight < distances[edge.target]) {
-				distances[edge.target] = distances[edge.source] + edge.weight;
-				parents[edge.target] = edge.source;
+	var closedList = [];
+
+	do {
+
+		// Get minimum distance item.
+		var node = openList.pop();
+		results.nodesChecked++;
+		closedList.push(node);
+
+		//console.log("Checking node: " + node);
+
+		// Found our target.
+		if (node === end) {
+			results.found = true;
+			break;
+		}
+
+		var neighbors = graph.adjacent(node);
+		for (var i=0;i<neighbors.length;i++) {
+			var neighbor = neighbors[i];
+			//console.log("   Neighbor: " + neighbor);
+
+			// Already visited
+			if (closedList.indexOf(neighbor) !== - 1)
+				continue;
+
+			var dist = distances[node] + graph.getEdgeWeight(node, neighbor);
+			//console.log("   Distance: ", dist);
+
+			if (dist < distances[neighbor]) {
+				distances[neighbor] = dist;
+				parents[neighbor] = node;
+			}
+
+
+			if (openList.toArray().indexOf(neighbor) === -1) {
+				openList.push(neighbor);
 			}
 		}
-	}
 
-	// CHeck for negative weight cycle
-	for (let i=0;i<edges.length;i++) {
-		let edge = edges[i];
-		if (distances[edge.source] + edge.weight < distances[edge.target])
-			return results;
-	}
 
-	results.found = true;
+
+	} while (openList.peek() !== null);
+
+
+	if (!results.found)
+		return results;
+
 
 	// Build our actual path.
 	var currentNode = end;
@@ -70,6 +104,7 @@ module.exports = function(graph, start, end) {
 			break;
 		}
 	}
+
 
 	return results;
 };

@@ -9,6 +9,7 @@ var q 			= require('q');
 var breadth     = require('./breadth-first-search');
 var depth       = require('./depth-first-search');
 var bellmanford = require('./bellman-ford');
+var dijkstra    = require('./dijkstra');
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -28,12 +29,31 @@ console.log("Finding " + end.id + " from " + start.id + ":");
 
 var startTime = new Date();
 var steps = breadth(graph, start.id, end.id);
-console.log("   Breadth-first: " + (steps === -1 ? " Could not locate" : (steps.toLocaleString() + " steps")) + ", in " + (new Date() - startTime) + "ms.");
+if (steps !== -1)
+	console.log("   Breadth-first: Target found.  Checked " + steps + " nodes.  Process took " + (new Date() - startTime) + "ms.");
+else
+	console.log("   Breadth-first: Target not found, or graph has a negative cycle.  Process took " + (new Date() - startTime) + "ms.");
+
+
+//console.log("   Breadth-first: " + (steps === -1 ? " Could not locate" : (steps.toLocaleString() + " steps")) + ", in " + (new Date() - startTime) + "ms.");
 
 startTime = new Date();
 steps = depth(graph, start.id, end.id);
-console.log("   Depth-first: " + (steps === -1 ? " Could not locate" : (steps.toLocaleString() + " steps")) + ", in " + (new Date() - startTime) + "ms.");
+if (steps !== -1)
+	console.log("   Depth-first: Target found.  Checked " + steps + " nodes.  Process took " + (new Date() - startTime) + "ms.");
+else
+	console.log("   Depth-first: Target not found, or graph has a negative cycle.  Process took " + (new Date() - startTime) + "ms.");
 
 startTime = new Date();
 results = bellmanford(graph, start.id, end.id);
-console.log("   bellman-ford: " + (results.length === 0 ? " Could not locate" : (results.length.toLocaleString() + " steps")) + ", in " + (new Date() - startTime) + "ms.");
+if (results.found)
+	console.log("   Bellman-Ford:  Path is " + results.path.length.toLocaleString() + " nodes long.  Checked " + results.nodesChecked.toLocaleString() + " nodes.  Process took " + (new Date() - startTime) + "ms.");
+else
+	console.log("   Bellman-Ford: Path not found, or graph has a negative cycle.  Process took " + (new Date() - startTime) + "ms.");
+
+startTime = new Date();
+results = dijkstra(graph, start.id, end.id);
+if (results.found)
+	console.log("   Dijkstra:  Path is " + results.path.length.toLocaleString() + " nodes long.  Checked " + results.nodesChecked.toLocaleString() + " nodes.  Process took " + (new Date() - startTime) + "ms.");
+else
+	console.log("   Dijkstra: Path not found, or graph has a negative cycle.  Process took " + (new Date() - startTime) + "ms.");

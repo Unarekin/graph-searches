@@ -26,6 +26,8 @@ Bellman-Ford shortest path finding algorithm.
 https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
 
 ## Dijkstra
+Dijkstra's shortest-path finding algorithm.  This implementation uses a heap data type to ease sorting a list of nodes by edge weight (https://www.npmjs.com/package/heap).
+https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 ## A*
 
 

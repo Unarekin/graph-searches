@@ -1,6 +1,7 @@
 'use strict'
 var fs = require('fs');
 var heap = require('heap');
+var greatcircle = require('great-circle');
 
 /**
  * Searches for the shortest path from start to end.
@@ -18,13 +19,26 @@ module.exports = function(graph, start, end, options) {
 		found: false
 	}
 
+
+	var greatCircleHeuristic = function(source, target) {
+		var sourceNode = source;
+		if (typeof sourceNode === 'string')
+			sourceNode = graph.node(source);
+		var targetNode = target;
+		if (typeof targetNode === 'string')
+			targetNode = graph.node(target);
+
+		var dist = greatcircle.distance(sourceNode.lat, sourceNode.lon, targetNode.lat, targetNode.lon);
+		//console.log("GC Dist: " + dist);
+		return dist;
+	}
+
+
 	var distances = {};
 	var parents = {};
 
 
-	var weightVar = 'travelTime';
-	if (options && options.byDistance)
-		weightVar = 'distance';
+	var weightVar = 'distance';
 
 	// The graph structure we're using does not provide a mechanism to retrieve all edges
 	//var serialized = graph.serialize();
@@ -78,7 +92,7 @@ module.exports = function(graph, start, end, options) {
 			if (closedList.indexOf(neighbor) !== - 1)
 				continue;
 
-			var dist = distances[node] + graph.edge(node, neighbor)[weightVar];
+			var dist = distances[node] + graph.edge(node, neighbor)[weightVar]  + greatCircleHeuristic(neighbor, end);
 			//console.log("   Distance: ", dist);
 
 			if (dist < distances[neighbor]) {

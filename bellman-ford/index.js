@@ -8,7 +8,7 @@
  * @returns {Array} Nodes traversed, in order.
  */
 
-module.exports = function(graph, start, end) {
+module.exports = function(graph, start, end, options) {
 	var distances = {};
 	var parents = {};
 
@@ -18,15 +18,19 @@ module.exports = function(graph, start, end) {
 		found: false
 	};
 
+	var weightVar = 'travelTime';
+	if (options && options.byDistance)
+		weightVar = 'distance';
+
 	// The graph structure we're using does not provide a mechanism to retrieve all edges
-	var serialized = graph.serialize();
+	//var serialized = graph.serialize();
 
-	var nodes = serialized.nodes;
-	var edges = serialized.links;
+	//var nodes = serialized.nodes;
+	//var edges = serialized.links;
 
-	// The serialization function of this graph structure doesn't include the weights
-	// of edges, for some reason.  Decorate it on our list of edges, for ease of lookup later.
-	edges.forEach(function(edge) { edge.weight = graph.getEdgeWeight(edge.source, edge.target); });
+	var nodes = graph.nodes().map(function(id) { return graph.node(id); });
+	var edges = graph.edges().map(function(edge) { return graph.edge(edge.v, edge.w); });
+
 
 	// Initialize our distances to infinity, and our parents to null.
 	nodes.forEach(function(node) {
@@ -44,8 +48,8 @@ module.exports = function(graph, start, end) {
 		for (let j=0;j<edges.length;j++) {
 			let edge = edges[j];
 			// Relax, man.  Relax.
-			if (distances[edge.source] + edge.weight < distances[edge.target]) {
-				distances[edge.target] = distances[edge.source] + edge.weight;
+			if (distances[edge.source] + edge[weightVar] < distances[edge.target]) {
+				distances[edge.target] = distances[edge.source] + edge[weightVar];
 				parents[edge.target] = edge.source;
 			}
 		}
@@ -54,7 +58,7 @@ module.exports = function(graph, start, end) {
 	// CHeck for negative weight cycle
 	for (let i=0;i<edges.length;i++) {
 		let edge = edges[i];
-		if (distances[edge.source] + edge.weight < distances[edge.target])
+		if (distances[edge.source] + edge[weightVar] < distances[edge.target])
 			return results;
 	}
 

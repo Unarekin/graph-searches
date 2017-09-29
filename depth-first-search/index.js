@@ -10,7 +10,7 @@ module.exports = function(graph, start, end) {
 
 
 	while (true) {
-		// Grab newest candidate
+		// Grab oldest candidate
 		var node = toCheck.pop();
 		visitedList.push(node);
 		nodesChecked++;
@@ -18,11 +18,12 @@ module.exports = function(graph, start, end) {
 		if (node == end) {
 			return nodesChecked;
 		}
+		
+		var adjacent = graph.outEdges(node).map(function(edge) { return edge.w; });
+		toCheck = toCheck.concat(adjacent).filter(function(elem) { return visitedList.indexOf(elem) === -1; });
+		toCheck = removeDuplicates(toCheck);
 
-		//toCheck = toCheck.concat(graph.adjacent(node).filter(function(elem) { return visitedList.indexOf(elem) === -1; }));
 
-		var adjacent = removeDuplicates(graph.adjacent(node).filter(function(elem) { return visitedList.indexOf(elem) === -1; }));
-		toCheck = removeDuplicates(toCheck.concat(adjacent));
 
 		
 		if (toCheck.length===0) {

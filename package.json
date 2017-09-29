@@ -22,7 +22,8 @@
   "homepage": "https://github.com/Unarekin/graph-searches#readme",
   "dependencies": {
     "fast-csv": "^2.4.0",
-    "graph-data-structure": "^1.0.0",
+    "graphlib": "^2.1.1",
+    "great-circle": "^0.2.8",
     "heap": "^0.2.6",
     "q": "^1.5.0"
   }

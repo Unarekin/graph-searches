@@ -28,8 +28,10 @@ https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm
 ## Dijkstra
 Dijkstra's shortest-path finding algorithm.  This implementation uses a heap data type to ease sorting a list of nodes by edge weight (https://www.npmjs.com/package/heap).
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
-## A*
 
+## A*
+An update of Dijkstra's algorithm, adding in a heuristic to try and estimate distance from nodes to the target.  The heuristic implemented in this repository is one based on [great circle distance]great-circle distance](https://en.wikipedia.org/wiki/Great-circle_distance), as the data available for stops includes latitude and longitude.
+https://en.wikipedia.org/wiki/A*_search_algorithm
 
 ## Testing
 Tests are written in mocha and may require this library be installed.
@@ -42,10 +44,6 @@ sudo npm install -g mocha
 
 Otherwise, ```npm run test ``` will execute the tests.
 
-## History
- 
-Version 1.0 (2017-09-25) - Initial setup
- 
 ## License
  
 The MIT License (MIT)

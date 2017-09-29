@@ -3,8 +3,8 @@ var fs = require('fs');
 var path = require('path');
 var q = require('q');
 var csv = require('fast-csv');
-
-var graphLib = require('graph-data-structure');
+var greatcircle = require('great-circle');
+var graphLib = require('graphlib').Graph;
 
 var stopData = [];
 var edgeData = [];
@@ -14,16 +14,17 @@ var graph = new graphLib();
 createStops()
 .then(function() {
 	for (let i=0;i<stopData.length;i++)
-		graph.addNode(stopData[i].id);
-	
-	fs.writeFileSync("./stops.json", JSON.stringify(stopData));
+		graph.setNode(stopData[i].id, stopData[i]);
+
 	return createEdges();
 })
 .then(function() {
-	fs.writeFileSync("./routes.json", JSON.stringify(edgeData));
-})
-.then(function() {
-	var serialized = graph.serialize();
+	//var serialized = graph.serialize();
+
+	var serialized = {
+		nodes: stopData,
+		edges: edgeData
+	};
 	fs.writeFileSync("./graph.json", JSON.stringify(serialized));
 })
 .catch(function(err) {
@@ -91,11 +92,21 @@ function createEdges() {
 				if (edges[prev.stop].indexOf(curr.stop) === -1) {
 					edges[prev.stop].push(curr.stop);
 
-					var weight = 0;
+					var travelTime = Math.floor((new Date("1/1/2000 " + curr.arrival) - new Date("1/1/2000 " + prev.departure)) / 1000);
+					//graph.addEdge(prev.stop, curr.stop, weight);
 
-					weight = Math.floor((new Date("1/1/2000 " + curr.arrival) - new Date("1/1/2000 " + prev.departure)) / 1000);
-					graph.addEdge(prev.stop, curr.stop, weight);
-					edgeData.push({source: prev.stop, target: curr.stop, weight: weight});
+					var prevStop = graph.node(prev.stop);
+					var currStop = graph.node(curr.stop);
+
+					var edge = {
+						source: prev.stop,
+						target: curr.stop,
+						travelTime: travelTime,
+						distance: greatcircle.distance(prevStop.lat, prevStop.lon, currStop.lat, currStop.lon)
+					};
+
+					edgeData.push(edge);
+					graph.setEdge(prev.stop, curr.stop, edge);
 				}
 
 

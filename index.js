@@ -11,6 +11,8 @@ var depth       = require('./depth-first-search');
 var bellmanford = require('./bellman-ford');
 var dijkstra    = require('./dijkstra');
 var astar       = require('./a-star');
+
+var jarnikprim  = require('./jarnikprim');
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -69,3 +71,8 @@ if (results.found)
 	console.log("   A*:  Path is " + results.path.length.toLocaleString() + " nodes long.  Checked " + results.nodesChecked.toLocaleString() + " nodes.  Process took " + (new Date() - startTime) + "ms.");
 else
 	console.log("   A*: Path not found, or graph has a negative cycle.  Process took " + (new Date() - startTime) + "ms.");
+
+
+startTime = new Date();
+results = jarnikprim(graph);
+console.log("   Jarník-Prim: Minimum spanning tree calculated in " + (new Date() - startTime) + "ms.");

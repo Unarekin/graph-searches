@@ -26,6 +26,8 @@ createStops()
 		edges: edgeData
 	};
 	fs.writeFileSync("./graph.json", JSON.stringify(serialized));
+	fs.writeFileSync('./nodes.json', JSON.stringify(stopData));
+	fs.writeFileSync('./edges.json', JSON.stringify(edgeData));
 })
 .catch(function(err) {
 	console.error(err.message);

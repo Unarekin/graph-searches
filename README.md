@@ -1,7 +1,7 @@
 # Graph-Searches
 Implementation of several common graph searching algorithms.  Graph structure is implemented via [graph-data-structure](https://www.npmjs.com/package/graph-data-structure).
 
-You can find a Google Maps-enabled visualization of these on [plunkr](http://run.plnkr.co/J5dMeNgjYKgdhWej/);
+You can find a Google Maps-enabled visualization of these on [plunkr](http://plnkr.co/edit/j5mHAMUp8SsSpnoRbZe1?p=info);
 
 ## Data
 The graph is built from a list of stops and stop times taken from the Capital Metro GTFS (General Transit Feed Specification) data set, available here:
